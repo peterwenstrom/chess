@@ -57,6 +57,7 @@
     <Compile Include="Bishop.cs" />
     <Compile Include="Coordinates.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameRules.cs" />
     <Compile Include="Piece.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Queen.cs" />

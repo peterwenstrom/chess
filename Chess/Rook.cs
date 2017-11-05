@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    public class Rook : Piece
+    public class Rook
     {
-        public Rook(Player owner) : base(owner)
+        public Rook(Player owner)
         {
             
         }
@@ -21,7 +21,7 @@ namespace Chess
                 {
                     for (int i = from.Y; i > to.Y; --i)
                     {
-                        if (!gameBoard.IsTileEmpty(new Coordinates(from.X, i)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
                             return true;
                     }
                 }
@@ -29,7 +29,7 @@ namespace Chess
                 {
                     for (int i = from.Y; i < to.Y; ++i)
                     {
-                        if (!gameBoard.IsTileEmpty(new Coordinates(from.X, i)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
                             return true;
                     }
                 }
@@ -40,7 +40,7 @@ namespace Chess
                 {
                     for (int i = from.X; i > to.X; --i)
                     {
-                        if (!gameBoard.IsTileEmpty(new Coordinates(i, from.Y)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
                             return true;
                     }
                 }
@@ -48,7 +48,7 @@ namespace Chess
                 {
                     for (int i = from.X; i < to.X; ++i)
                     {
-                        if (!gameBoard.IsTileEmpty(new Coordinates(i, from.Y)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
                             return true;
                     }
                 }
@@ -56,12 +56,12 @@ namespace Chess
             return false;
         }
 
-        protected override bool IsPathBlocked(Board gameBoard, Coordinates from, Coordinates to)
+        protected bool IsPathBlocked(Board gameBoard, Coordinates from, Coordinates to)
         {
             return CheckStraightBlocked(gameBoard, from, to);
         }
 
-        public override bool IsValidMove(Board gameBoard, Coordinates from, Coordinates to)
+        public bool IsValidMove(Board gameBoard, Coordinates from, Coordinates to)
         {
             if ((from.X != to.X && from.Y != to.Y) || ((from.X == to.X && from.Y == to.Y)))
                 return false;

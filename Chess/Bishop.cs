@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    public class Bishop : Piece
+    public class Bishop
     {
-        public Bishop(Player owner) : base(owner)
+        public Bishop(Player owner)
         {
 
         }
@@ -20,7 +20,7 @@ namespace Chess
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsTileEmpty(new Coordinates(to.X + i, to.Y + i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y + i)))
                         return true;
                 }
             }
@@ -28,7 +28,7 @@ namespace Chess
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsTileEmpty(new Coordinates(to.X - i, to.Y + i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y + i)))
                         return true;
                 }
             }
@@ -36,7 +36,7 @@ namespace Chess
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsTileEmpty(new Coordinates(to.X - i, to.Y - i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y - i)))
                         return true;
                 }
             }
@@ -44,19 +44,19 @@ namespace Chess
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsTileEmpty(new Coordinates(to.X + i, to.Y - i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y - i)))
                         return true;
                 }
             }
             return false;
         }
 
-        protected override bool IsPathBlocked(Board gameBoard, Coordinates from, Coordinates to)
+        protected bool IsPathBlocked(Board gameBoard, Coordinates from, Coordinates to)
         {
             return CheckDiagonalBlocked(gameBoard, from, to);
         }
 
-        public override bool IsValidMove(Board gameBoard, Coordinates from, Coordinates to)
+        public bool IsValidMove(Board gameBoard, Coordinates from, Coordinates to)
         {
             if (Math.Abs(from.X - to.X) != Math.Abs(from.Y - to.Y))
                 return false;

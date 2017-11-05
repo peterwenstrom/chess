@@ -8,10 +8,17 @@ namespace Chess
 {
     public class Player
     {
-        public string Color { get; private set; }
-        public int Score { get; private set; }
+        public enum PlayerColor
+        {
+            White,
+            Black
+        }
 
-        public Player(string color)
+        public PlayerColor Color { get; private set; }
+        public int Score { get; private set; }
+        public List<Piece> Pieces { get; set; }
+
+        public Player(PlayerColor color)
         {
             Color = color;
             Score = 0;

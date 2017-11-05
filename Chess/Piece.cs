@@ -6,20 +6,30 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    public abstract class Piece
+    public class Piece
     {
-        public Player Owner { get; private set; }
-        public bool HasMoved { get; set; }
-        public Coordinates Position { get; set; }
-
-        public Piece(Player owner)
+        public enum PieceType
         {
-            Owner = owner;
-            HasMoved = false;
+            Pawn,
+            Knight,
+            Bishop,
+            Rook,
+            Queen,
+            King
         }
 
-        public abstract bool IsValidMove(Board gameBoard, Coordinates from, Coordinates to);
-        protected abstract bool IsPathBlocked(Board gameBoard, Coordinates from, Coordinates to);
+        public Coordinates Position { get; set; }
+        public Player Owner { get; private set; }
+        public PieceType Type { get; private set; }
+        public bool HasMoved { get; set; }
+
+        public Piece(Coordinates position, Player owner, PieceType type)
+        {
+            Position = position;
+            Owner = owner;
+            Type = type;
+            HasMoved = false;
+        }
 
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Chess.Player;
 
 namespace Chess
 {
@@ -11,23 +12,16 @@ namespace Chess
 
         public static void Test()
         {
-            Player Player1 = new Player("white");
-            Player Player2 = new Player("black");
-
-            Tile[,] TileArray = new Tile[8, 8];
+            Player Player1 = new Player(PlayerColor.White);
+            Player Player2 = new Player(PlayerColor.Black);
             
-            Board TestBoard = new Board(TileArray);
+            Board TestBoard = new Board(new Piece[8, 8]);
+            GameRules Rules = new GameRules(TestBoard);
+            TestBoard.NewBoard(Player1, Player2);
 
-            Rook TestRook = new Rook(Player1);
-            Bishop TestBishop = new Bishop(Player1);
-            Queen TestQueen = new Queen(Player1);
+            Coordinates Position = new Coordinates(0, 0);
 
-            TestBoard.GameBoard[3, 1].Piece = TestRook;
-
-            Coordinates From = new Coordinates(2, 2);
-            Coordinates To = new Coordinates(5, 2);
-
-            if (TestQueen.IsValidMove(TestBoard, From, To))
+            if (TestBoard.IsPositionEmpty(Position))
                 System.Diagnostics.Debug.WriteLine("hejsan hejsan");
             else
                 System.Diagnostics.Debug.WriteLine("nope nope nope");
