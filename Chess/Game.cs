@@ -19,9 +19,14 @@ namespace Chess
             GameRules Rules = new GameRules(TestBoard);
             TestBoard.NewBoard(Player1, Player2);
 
-            Coordinates Position = new Coordinates(0, 0);
+            Coordinates From = new Coordinates(1, 1);
+            Coordinates To = new Coordinates(5, 5);
+            Coordinates To2 = new Coordinates(5, 4);
 
-            if (TestBoard.IsPositionEmpty(Position))
+            Piece piece = new Piece(To, Player1, Piece.PieceType.Bishop);
+            TestBoard.GameBoard[To.X, To.Y] = piece;
+
+            if (Rules.IsValidMove(TestBoard.GetPiece(To), From))
                 System.Diagnostics.Debug.WriteLine("hejsan hejsan");
             else
                 System.Diagnostics.Debug.WriteLine("nope nope nope");

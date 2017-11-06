@@ -18,6 +18,16 @@ namespace Chess
             GameBoard = gameBoard;
         }
 
+        public Piece GetPiece(Coordinates position)
+        {
+            return GameBoard[position.X, position.Y];
+        }
+
+        public void SetPiece(Coordinates position, Piece piece = null)
+        {
+            GameBoard[position.X, position.Y] = piece;
+        }
+
         public bool IsPositionEmpty(Coordinates position)
         {
             return GameBoard[position.X, position.Y] == null;
@@ -26,6 +36,13 @@ namespace Chess
         public bool IsPieceSameColor(Coordinates position, PlayerColor color)
         {
             return GameBoard[position.X, position.Y].Owner.Color == color;
+        }
+
+        public void Move(Coordinates from, Coordinates to)
+        {
+            Piece piece = GetPiece(from);
+            SetPiece(from);
+            SetPiece(to, piece);
         }
 
         public void ClearBoard()
