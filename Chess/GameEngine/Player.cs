@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess
+namespace Chess.GameEngine
 {
+    public enum PlayerColor
+    {
+        White,
+        Black
+    }
+
     public class Player
     {
-        public enum PlayerColor
-        {
-            White,
-            Black
-        }
 
         public PlayerColor Color { get; private set; }
         public int Score { get; private set; }
@@ -22,6 +23,11 @@ namespace Chess
         {
             Color = color;
             Score = 0;
+        }
+
+        public void RemovePiece(Piece piece)
+        {
+            Pieces.Remove(piece);
         }
     }
 }

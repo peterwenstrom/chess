@@ -4,10 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static Chess.Piece;
-using static Chess.Player;
-
-namespace Chess
+namespace Chess.GameEngine
 {
     public class Board
     {
@@ -16,6 +13,56 @@ namespace Chess
         public Board (Piece[,] gameBoard)
         {
             GameBoard = gameBoard;
+        }
+
+        public void PrintBoard()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Piece piece = GameBoard[i, j];
+
+                    switch (piece?.Type)
+                    {
+                        case PieceType.Bishop:
+                            System.Diagnostics.Debug.Write("B ");
+                            break;
+                        case PieceType.Rook:
+                            System.Diagnostics.Debug.Write("R ");
+                            break;
+                        case PieceType.Queen:
+                            System.Diagnostics.Debug.Write("Q ");
+                            break;
+                        case PieceType.Pawn:
+                            System.Diagnostics.Debug.Write("P ");
+                            break;
+                        case PieceType.King:
+                            System.Diagnostics.Debug.Write("K ");
+                            break;
+                        case PieceType.Knight:
+                            System.Diagnostics.Debug.Write("k ");
+                            break;
+                        default:
+                            System.Diagnostics.Debug.Write("X ");
+                            break;
+                    }
+                }
+                System.Diagnostics.Debug.Write("\n");
+            }
+            System.Diagnostics.Debug.Write("\n");
+        }
+
+        public Board GetCopy()
+        {
+            Board NewBoard = new Board(new Piece[GameBoard.GetLength(0), GameBoard.GetLength(1)]);
+
+            for (int i = 0; i < NewBoard.GameBoard.GetLength(0); ++i)
+                for (int j = 0; j < NewBoard.GameBoard.GetLength(1); ++j)
+                    if (GameBoard[i, j] != null)
+                        NewBoard.GameBoard[i, j] = new Piece(GameBoard[i, j]);
+            
+            return NewBoard;
         }
 
         public Piece GetPiece(Coordinates position)
@@ -35,7 +82,7 @@ namespace Chess
 
         public bool IsPieceSameColor(Coordinates position, PlayerColor color)
         {
-            return GameBoard[position.X, position.Y].Owner.Color == color;
+            return GameBoard[position.X, position.Y]?.Owner.Color == color;
         }
 
         public void Move(Coordinates from, Coordinates to)
@@ -57,10 +104,10 @@ namespace Chess
 
             for (int i = 0; i < 8; i++)
             {
-                GameBoard[i, 1] = new Piece(new Coordinates(i, 1), player1, PieceType.Pawn);
-                PiecesPlayer1.Add(GameBoard[i, 1]);
-                GameBoard[i, 6] = new Piece(new Coordinates(i, 6), player2, PieceType.Pawn);
-                PiecesPlayer2.Add(GameBoard[i, 6]);
+                GameBoard[1, i] = new Piece(new Coordinates(1, i), player1, PieceType.Pawn);
+                PiecesPlayer1.Add(GameBoard[1, i]);
+                GameBoard[6, i] = new Piece(new Coordinates(6, i), player2, PieceType.Pawn);
+                PiecesPlayer2.Add(GameBoard[6, i]);
             }
             GameBoard[0, 0] = new Piece(new Coordinates(0, 0), player1, PieceType.Rook);
             PiecesPlayer1.Add(GameBoard[0, 0]);
@@ -102,8 +149,8 @@ namespace Chess
 
         public void LoadBoard(List<Piece> piecesPlayer1, List<Piece> piecesPlayer2)
         {
-            piecesPlayer1.Select(piece => GameBoard[piece.Position.X, piece.Position.Y] = piece);
-            piecesPlayer2.Select(piece => GameBoard[piece.Position.X, piece.Position.Y] = piece);
+            piecesPlayer1.ForEach(piece => SetPiece(piece.Position, piece));
+            piecesPlayer2.ForEach(piece => SetPiece(piece.Position, piece));
         }
     }
 }

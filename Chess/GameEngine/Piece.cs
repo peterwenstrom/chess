@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess
+namespace Chess.GameEngine
 {
+    public enum PieceType
+    {
+        Pawn,
+        Knight,
+        Bishop,
+        Rook,
+        Queen,
+        King
+    }
+
     public class Piece
     {
-        public enum PieceType
-        {
-            Pawn,
-            Knight,
-            Bishop,
-            Rook,
-            Queen,
-            King
-        }
 
         public Coordinates Position { get; set; }
         public Player Owner { get; private set; }
@@ -29,6 +30,15 @@ namespace Chess
             Owner = owner;
             Type = type;
             HasMoved = false;
+        }
+
+        // Copy constructor
+        public Piece(Piece piece)
+        {
+            Position = piece.Position;
+            Owner = piece.Owner;
+            Type = piece.Type;
+            HasMoved = piece.HasMoved;
         }
 
     }

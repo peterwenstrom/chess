@@ -4,48 +4,82 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static Chess.Piece;
-using static Chess.Player;
-
-namespace Chess
+namespace Chess.GameEngine
 {
     public class GameRules
     {
-        public Board GameBoard { get; private set; }
+        public List<Coordinates> GetPossibleMoves(Piece piece, Board gameBoard)
+        {
+            List<Coordinates> Moves = new List<Coordinates>();
 
-        public GameRules(Board gameBoard)
-        {
-            GameBoard = gameBoard;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Coordinates NewPostion = new Coordinates(i, j);
+                    if (IsValidMove(gameBoard, piece, NewPostion))
+                        Moves.Add(NewPostion);
+                }
+            }
+
+            return Moves;
         }
-        public bool IsInCheck(Piece king, List<Piece> opposingPieces)
+
+        public bool IsStalemate(Board gameBoard, List<Piece> pieces, List<Piece> opposingPieces)
         {
-            return false;
+            foreach (var piece in pieces)
+            {
+                List<Coordinates> Moves = GetPossibleMoves(piece, gameBoard);
+                foreach (var move in Moves)
+                {
+                    Board tempBoard = gameBoard.GetCopy();
+                    tempBoard.Move(piece.Position, move);
+                    if (!this.IsCheck(tempBoard, pieces, opposingPieces))
+                        return false;
+                }
+            }
+
+            return true;
         }
-        public bool IsValidMove(Piece piece, Coordinates to)
+
+        public bool IsCheck(Board gameBoard, List<Piece> pieces, List<Piece> opposingPieces)
         {
-            if (!GameBoard.IsPositionEmpty(to) && GameBoard.IsPieceSameColor(to, piece.Owner.Color))
+            Piece king = pieces.Where(piece => piece.Type == PieceType.King).First();
+ 
+            return opposingPieces.Any(piece => IsValidMove(gameBoard, piece, king.Position));
+        }
+
+        public bool IsCheckmate(Board gameBoard, List<Piece> pieces, List<Piece> opposingPieces)
+        {
+            return IsStalemate(gameBoard, pieces, opposingPieces) &&
+                IsCheck(gameBoard, pieces, opposingPieces);
+        }
+
+        public bool IsValidMove(Board gameBoard, Piece piece, Coordinates to)
+        {
+            if (!gameBoard.IsPositionEmpty(to) && gameBoard.IsPieceSameColor(to, piece.Owner.Color))
                 return false;
             
             switch (piece.Type)
             {
                 case PieceType.Bishop:
-                    if (IsDiagonal(piece.Position, to) && !IsDiagonalBlocked(piece.Position, to))
+                    if (IsDiagonal(piece.Position, to) && !IsDiagonalBlocked(gameBoard, piece.Position, to))
                         return true;
                     else
                         return false;
                 case PieceType.Rook:
-                    if (IsStraight(piece.Position, to) && !IsStraightBlocked(piece.Position, to))
+                    if (IsStraight(piece.Position, to) && !IsStraightBlocked(gameBoard, piece.Position, to))
                         return true;
                     else
                         return false;
                 case PieceType.Queen:
-                    if ((IsDiagonal(piece.Position, to) && !IsDiagonalBlocked(piece.Position, to)) ||
-                        (IsStraight(piece.Position, to) && !IsStraightBlocked(piece.Position, to)))
+                    if ((IsDiagonal(piece.Position, to) && !IsDiagonalBlocked(gameBoard, piece.Position, to)) ||
+                        (IsStraight(piece.Position, to) && !IsStraightBlocked(gameBoard, piece.Position, to)))
                         return true;
                     else
                         return false;
                 case PieceType.Pawn:
-                    if (IsPawnMove(piece, to))
+                    if (IsPawnMove(gameBoard, piece, to))
                         return true;
                     else
                         return false;
@@ -81,27 +115,27 @@ namespace Chess
                 return false;
         }
 
-        private bool IsPawnMove(Piece pawn, Coordinates to)
+        private bool IsPawnMove(Board gameBoard, Piece pawn, Coordinates to)
         {
             if (pawn.Owner.Color == PlayerColor.White)
             {
-                if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == 1 && GameBoard.IsPositionEmpty(to))
+                if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == 1 && gameBoard.IsPositionEmpty(to))
                     return true;
                 else if (to.Y - pawn.Position.Y == 1 && Math.Abs(pawn.Position.X - to.X) == 1 &&
-                    !GameBoard.IsPositionEmpty(to) && !GameBoard.IsPieceSameColor(to, pawn.Owner.Color))
+                    !gameBoard.IsPositionEmpty(to) && !gameBoard.IsPieceSameColor(to, pawn.Owner.Color))
                     return true;
                 else if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == 2 &&
-                    !IsStraightBlocked(pawn.Position, to) && GameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
+                    !IsStraightBlocked(gameBoard, pawn.Position, to) && gameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
                     return true;
             } else if (pawn.Owner.Color == PlayerColor.Black)
             {
-                if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == -1 && GameBoard.IsPositionEmpty(to))
+                if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == -1 && gameBoard.IsPositionEmpty(to))
                     return true;
                 else if (to.Y - pawn.Position.Y == -1 && Math.Abs(pawn.Position.X - to.X) == 1 &&
-                    !GameBoard.IsPositionEmpty(to) && !GameBoard.IsPieceSameColor(to, pawn.Owner.Color))
+                    !gameBoard.IsPositionEmpty(to) && !gameBoard.IsPieceSameColor(to, pawn.Owner.Color))
                     return true;
                 else if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == -2 &&
-                    !IsStraightBlocked(pawn.Position, to) && GameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
+                    !IsStraightBlocked(gameBoard, pawn.Position, to) && gameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
                     return true;
             }
 
@@ -116,7 +150,7 @@ namespace Chess
                 return true;
         }
 
-        private bool IsStraightBlocked(Coordinates from, Coordinates to)
+        private bool IsStraightBlocked(Board gameBoard, Coordinates from, Coordinates to)
         {
             if (from.X == to.X)
             {
@@ -124,7 +158,7 @@ namespace Chess
                 {
                     for (int i = from.Y-1; i > to.Y; --i)
                     {
-                        if (!GameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
                             return true;
                     }
                 }
@@ -132,7 +166,7 @@ namespace Chess
                 {
                     for (int i = from.Y+1; i < to.Y; ++i)
                     {
-                        if (!GameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
                             return true;
                     }
                 }
@@ -143,7 +177,7 @@ namespace Chess
                 {
                     for (int i = from.X-1; i > to.X; --i)
                     {
-                        if (!GameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
                             return true;
                     }
                 }
@@ -151,7 +185,7 @@ namespace Chess
                 {
                     for (int i = from.X+1; i < to.X; ++i)
                     {
-                        if (!GameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
                             return true;
                     }
                 }
@@ -166,14 +200,14 @@ namespace Chess
             else
                 return true;
         }
-        private bool IsDiagonalBlocked(Coordinates from, Coordinates to)
+        private bool IsDiagonalBlocked(Board gameBoard, Coordinates from, Coordinates to)
         {
             int Distance = Math.Abs(from.X - to.X) - 1;
             if (from.X > to.X && from.Y > to.Y)
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!GameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y + i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y + i)))
                         return true;
                 }
             }
@@ -181,7 +215,7 @@ namespace Chess
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!GameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y + i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y + i)))
                         return true;
                 }
             }
@@ -189,7 +223,7 @@ namespace Chess
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!GameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y - i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y - i)))
                         return true;
                 }
             }
@@ -197,7 +231,7 @@ namespace Chess
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!GameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y - i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y - i)))
                         return true;
                 }
             }

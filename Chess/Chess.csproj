@@ -54,11 +54,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Coordinates.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameRules.cs" />
-    <Compile Include="Piece.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="GameEngine\Coordinates.cs" />
+    <Compile Include="GameEngine\Game.cs" />
+    <Compile Include="GameEngine\GameRules.cs" />
+    <Compile Include="GameEngine\Piece.cs" />
+    <Compile Include="GameEngine\Player.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,7 +67,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Board.cs" />
+    <Compile Include="GameEngine\Board.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
