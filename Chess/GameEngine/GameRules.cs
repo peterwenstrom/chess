@@ -25,16 +25,16 @@ namespace Chess.GameEngine
             return Moves;
         }
 
-        public bool IsStalemate(Board gameBoard, List<Piece> pieces, List<Piece> opposingPieces)
+        public bool IsStalemate(Board gameBoard, Player player)
         {
-            foreach (var piece in pieces)
+            foreach (var piece in gameBoard.FindPieces(player.Color))
             {
                 List<Coordinates> Moves = GetPossibleMoves(piece, gameBoard);
                 foreach (var move in Moves)
                 {
                     Board tempBoard = gameBoard.GetCopy();
                     tempBoard.Move(piece.Position, move);
-                    if (!this.IsCheck(tempBoard, pieces, opposingPieces))
+                    if (!this.IsCheck(tempBoard, player))
                         return false;
                 }
             }
@@ -42,17 +42,17 @@ namespace Chess.GameEngine
             return true;
         }
 
-        public bool IsCheck(Board gameBoard, List<Piece> pieces, List<Piece> opposingPieces)
+        public bool IsCheck(Board gameBoard, Player player)
         {
-            Piece king = pieces.Where(piece => piece.Type == PieceType.King).First();
- 
-            return opposingPieces.Any(piece => IsValidMove(gameBoard, piece, king.Position));
+            Piece King = gameBoard.FindKing(player.Color);
+            List<Piece> OpposingPieces = gameBoard.FindPieces(player.GetOpposingColor());
+            return OpposingPieces.Any(piece => IsValidMove(gameBoard, piece, King.Position));
         }
 
-        public bool IsCheckmate(Board gameBoard, List<Piece> pieces, List<Piece> opposingPieces)
+        public bool IsCheckmate(Board gameBoard, Player player)
         {
-            return IsStalemate(gameBoard, pieces, opposingPieces) &&
-                IsCheck(gameBoard, pieces, opposingPieces);
+            return IsStalemate(gameBoard, player) &&
+                IsCheck(gameBoard, player);
         }
 
         public bool IsValidMove(Board gameBoard, Piece piece, Coordinates to)
@@ -119,22 +119,22 @@ namespace Chess.GameEngine
         {
             if (pawn.Owner.Color == PlayerColor.White)
             {
-                if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == 1 && gameBoard.IsPositionEmpty(to))
+                if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == 1 && gameBoard.IsPositionEmpty(to))
                     return true;
-                else if (to.Y - pawn.Position.Y == 1 && Math.Abs(pawn.Position.X - to.X) == 1 &&
+                else if (to.X - pawn.Position.X == 1 && Math.Abs(pawn.Position.Y - to.Y) == 1 &&
                     !gameBoard.IsPositionEmpty(to) && !gameBoard.IsPieceSameColor(to, pawn.Owner.Color))
                     return true;
-                else if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == 2 &&
+                else if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == 2 &&
                     !IsStraightBlocked(gameBoard, pawn.Position, to) && gameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
                     return true;
             } else if (pawn.Owner.Color == PlayerColor.Black)
             {
-                if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == -1 && gameBoard.IsPositionEmpty(to))
+                if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == -1 && gameBoard.IsPositionEmpty(to))
                     return true;
-                else if (to.Y - pawn.Position.Y == -1 && Math.Abs(pawn.Position.X - to.X) == 1 &&
+                else if (to.X - pawn.Position.X == -1 && Math.Abs(pawn.Position.Y - to.Y) == 1 &&
                     !gameBoard.IsPositionEmpty(to) && !gameBoard.IsPieceSameColor(to, pawn.Owner.Color))
                     return true;
-                else if (pawn.Position.X == to.X && to.Y - pawn.Position.Y == -2 &&
+                else if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == -2 &&
                     !IsStraightBlocked(gameBoard, pawn.Position, to) && gameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
                     return true;
             }

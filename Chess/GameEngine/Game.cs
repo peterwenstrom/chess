@@ -32,9 +32,40 @@ namespace Chess.GameEngine
             ActivePlayer = PlayerWhite;
         }
 
+        public bool Move(Coordinates from, Coordinates to)
+        {
+            if (TryMove(from, to))
+            {
+                GameBoard.Move(from, to);
+                return true;
+            }
+            return false;
+        }
+
+        public string EndTurn()
+        {
+            GameBoard.PrintBoard();
+            ChangeActivePlayer();
+            bool IsCheck = Rules.IsCheck(GameBoard, ActivePlayer);
+            bool IsStalemate = Rules.IsStalemate(GameBoard, ActivePlayer);
+            if (IsCheck && IsStalemate)
+                return ActivePlayer.GetOpposingColor().ToString() + " player won the game!";
+            else if (IsCheck)
+                return ActivePlayer.Color.ToString() + " is in check!";
+            else if (IsStalemate)
+                return "It's a draw...";
+            else
+                return ActivePlayer.Color.ToString() + " players turn";
+        }
+
         public void ChangeActivePlayer()
         {
             ActivePlayer = GetOppositePlayer(ActivePlayer);
+        }
+
+        public List<Coordinates> GetPossibleMoves(Coordinates from)
+        {
+            return Rules.GetPossibleMoves(GameBoard.GetPiece(from), GameBoard);
         }
 
         private Player GetOppositePlayer(Player player)
@@ -42,33 +73,40 @@ namespace Chess.GameEngine
             return player == PlayerWhite ? PlayerBlack : PlayerWhite;
         }
 
-        public static void Test()
+        private bool TryMove(Coordinates from, Coordinates to)
         {
-            Player Player1 = new Player(PlayerColor.White);
-            Player Player2 = new Player(PlayerColor.Black);
+            Board TempBoard = GameBoard.GetCopy();
+            Piece Piece = TempBoard.GetPiece(from);
+            if (Piece == null)
+                return false;
+            if (Piece.Owner != ActivePlayer)
+                return false;
+            if (!Rules.IsValidMove(GameBoard, Piece, to))
+                return false;
+            TempBoard.Move(from, to);
+            if (Rules.IsCheck(TempBoard, ActivePlayer))
+                return false;
 
-            Board TestBoard = new Board(new Piece[8, 8]);
-            GameRules Rules = new GameRules();
+            return true;
+        }
 
-            TestBoard.NewBoard(Player1, Player2);
-
-            TestBoard.PrintBoard();
-
-            Piece piece = TestBoard.GetPiece(new Coordinates(1, 4));
-            Player2.RemovePiece(piece);
-
-            Board Board2 = TestBoard.GetCopy();
-            Board2.Move(new Coordinates(1, 1), new Coordinates(2, 1));
-
-            TestBoard.PrintBoard();
-
-            foreach (var tempPiece in Player1.Pieces) {
-                System.Diagnostics.Debug.Write(tempPiece.Position.X);
-                System.Diagnostics.Debug.Write(" ");
-                System.Diagnostics.Debug.WriteLine(tempPiece.Position.Y);
-            }
-            //Board2.PrintBoard();
-            
+        public void SkolmattTest()
+        {
+            NewGame();
+            Move(new Coordinates(1, 3), new Coordinates(3, 3));
+            System.Diagnostics.Debug.WriteLine(EndTurn());
+            Move(new Coordinates(6, 0), new Coordinates(5, 0));
+            System.Diagnostics.Debug.WriteLine(EndTurn());
+            Move(new Coordinates(0, 2), new Coordinates(3, 5));
+            System.Diagnostics.Debug.WriteLine(EndTurn());
+            Move(new Coordinates(7, 0), new Coordinates(6, 0));
+            System.Diagnostics.Debug.WriteLine(EndTurn());
+            Move(new Coordinates(0, 4), new Coordinates(2, 2));
+            System.Diagnostics.Debug.WriteLine(EndTurn());
+            Move(new Coordinates(7, 6), new Coordinates(5, 7));
+            System.Diagnostics.Debug.WriteLine(EndTurn());
+            Move(new Coordinates(2, 2), new Coordinates(6, 2));
+            System.Diagnostics.Debug.WriteLine(EndTurn());
         }
     }
 }

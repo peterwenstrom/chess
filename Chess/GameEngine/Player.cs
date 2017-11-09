@@ -17,7 +17,6 @@ namespace Chess.GameEngine
 
         public PlayerColor Color { get; private set; }
         public int Score { get; private set; }
-        public List<Piece> Pieces { get; set; }
 
         public Player(PlayerColor color)
         {
@@ -25,9 +24,9 @@ namespace Chess.GameEngine
             Score = 0;
         }
 
-        public void RemovePiece(Piece piece)
+        public PlayerColor GetOpposingColor()
         {
-            Pieces.Remove(piece);
+            return Color != PlayerColor.White ? PlayerColor.White : PlayerColor.Black;
         }
     }
 }

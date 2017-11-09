@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using Chess.GameEngine;
+
 namespace Chess
 {
     /// <summary>
@@ -15,7 +17,8 @@ namespace Chess
     {
         public App()
         {
-            Game.Test();
+            Game ChessGame = new Game(new GameRules());
+            ChessGame.Test();
         }
     }
 }
