@@ -17,14 +17,14 @@ namespace Chess.GameEngine
 
         public Board GetCopy()
         {
-            Board NewBoard = new Board(new Piece[GameBoard.GetLength(0), GameBoard.GetLength(1)]);
+            Board newBoard = new Board(new Piece[GameBoard.GetLength(0), GameBoard.GetLength(1)]);
 
-            for (int i = 0; i < NewBoard.GameBoard.GetLength(0); ++i)
-                for (int j = 0; j < NewBoard.GameBoard.GetLength(1); ++j)
+            for (int i = 0; i < newBoard.GameBoard.GetLength(0); ++i)
+                for (int j = 0; j < newBoard.GameBoard.GetLength(1); ++j)
                     if (GameBoard[i, j] != null)
-                        NewBoard.GameBoard[i, j] = new Piece(GameBoard[i, j]);
+                        newBoard.GameBoard[i, j] = new Piece(GameBoard[i, j]);
             
-            return NewBoard;
+            return newBoard;
         }
 
         public Piece GetPiece(Coordinates position)
@@ -48,12 +48,12 @@ namespace Chess.GameEngine
 
         public List<Piece> FindPieces(PlayerColor color)
         {
-            List<Piece> Pieces = new List<Piece>();
+            List<Piece> pieces = new List<Piece>();
             for (int i = 0; i < GameBoard.GetLength(0); ++i)
                 for (int j = 0; j < GameBoard.GetLength(1); ++j)
                     if (GameBoard[i, j] != null && GameBoard[i, j].Owner.Color == color)
-                        Pieces.Add(GameBoard[i, j]);
-            return Pieces;
+                        pieces.Add(GameBoard[i, j]);
+            return pieces;
         }
 
         public bool IsPositionEmpty(Coordinates position)

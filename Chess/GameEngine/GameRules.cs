@@ -10,27 +10,27 @@ namespace Chess.GameEngine
     {
         public List<Coordinates> GetPossibleMoves(Piece piece, Board gameBoard)
         {
-            List<Coordinates> Moves = new List<Coordinates>();
+            List<Coordinates> moves = new List<Coordinates>();
 
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    Coordinates NewPostion = new Coordinates(i, j);
-                    if (IsValidMove(gameBoard, piece, NewPostion))
-                        Moves.Add(NewPostion);
+                    Coordinates newPostion = new Coordinates(i, j);
+                    if (IsValidMove(gameBoard, piece, newPostion))
+                        moves.Add(newPostion);
                 }
             }
 
-            return Moves;
+            return moves;
         }
 
         public bool IsStalemate(Board gameBoard, Player player)
         {
             foreach (var piece in gameBoard.FindPieces(player.Color))
             {
-                List<Coordinates> Moves = GetPossibleMoves(piece, gameBoard);
-                foreach (var move in Moves)
+                List<Coordinates> moves = GetPossibleMoves(piece, gameBoard);
+                foreach (var move in moves)
                 {
                     Board tempBoard = gameBoard.GetCopy();
                     tempBoard.Move(piece.Position, move);
@@ -44,9 +44,9 @@ namespace Chess.GameEngine
 
         public bool IsCheck(Board gameBoard, Player player)
         {
-            Piece King = gameBoard.FindKing(player.Color);
-            List<Piece> OpposingPieces = gameBoard.FindPieces(player.GetOpposingColor());
-            return OpposingPieces.Any(piece => IsValidMove(gameBoard, piece, King.Position));
+            Piece king = gameBoard.FindKing(player.Color);
+            List<Piece> opposingPieces = gameBoard.FindPieces(player.GetOpposingColor());
+            return opposingPieces.Any(piece => IsValidMove(gameBoard, piece, king.Position));
         }
 
         public bool IsCheckmate(Board gameBoard, Player player)
@@ -202,10 +202,10 @@ namespace Chess.GameEngine
         }
         private bool IsDiagonalBlocked(Board gameBoard, Coordinates from, Coordinates to)
         {
-            int Distance = Math.Abs(from.Row - to.Row) - 1;
+            int distance = Math.Abs(from.Row - to.Row) - 1;
             if (from.Row > to.Row && from.Column > to.Column)
             {
-                for (int i = Distance; i > 0; --i)
+                for (int i = distance; i > 0; --i)
                 {
                     if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row + i, to.Column + i)))
                         return true;
@@ -213,7 +213,7 @@ namespace Chess.GameEngine
             }
             else if (from.Row < to.Row && from.Column > to.Column)
             {
-                for (int i = Distance; i > 0; --i)
+                for (int i = distance; i > 0; --i)
                 {
                     if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row - i, to.Column + i)))
                         return true;
@@ -221,7 +221,7 @@ namespace Chess.GameEngine
             }
             else if (from.Row < to.Row && from.Column < to.Column)
             {
-                for (int i = Distance; i > 0; --i)
+                for (int i = distance; i > 0; --i)
                 {
                     if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row - i, to.Column - i)))
                         return true;
@@ -229,7 +229,7 @@ namespace Chess.GameEngine
             }
             else if (from.Row > to.Row && from.Column < to.Column)
             {
-                for (int i = Distance; i > 0; --i)
+                for (int i = distance; i > 0; --i)
                 {
                     if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row + i, to.Column - i)))
                         return true;

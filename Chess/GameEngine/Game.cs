@@ -75,16 +75,16 @@ namespace Chess.GameEngine
 
         private bool TryMove(Coordinates from, Coordinates to)
         {
-            Board TempBoard = GameBoard.GetCopy();
-            Piece Piece = TempBoard.GetPiece(from);
-            if (Piece == null)
+            Board tempBoard = GameBoard.GetCopy();
+            Piece piece = tempBoard.GetPiece(from);
+            if (piece == null)
                 return false;
-            if (Piece.Owner != ActivePlayer)
+            if (piece.Owner != ActivePlayer)
                 return false;
-            if (!Rules.IsValidMove(GameBoard, Piece, to))
+            if (!Rules.IsValidMove(GameBoard, piece, to))
                 return false;
-            TempBoard.Move(from, to);
-            if (Rules.IsCheck(TempBoard, ActivePlayer))
+            tempBoard.Move(from, to);
+            if (Rules.IsCheck(tempBoard, ActivePlayer))
                 return false;
 
             return true;
