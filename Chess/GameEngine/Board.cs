@@ -29,12 +29,12 @@ namespace Chess.GameEngine
 
         public Piece GetPiece(Coordinates position)
         {
-            return GameBoard[position.X, position.Y];
+            return GameBoard[position.Row, position.Column];
         }
 
         public void SetPiece(Coordinates position, Piece piece = null)
         {
-            GameBoard[position.X, position.Y] = piece;
+            GameBoard[position.Row, position.Column] = piece;
         }
 
         public Piece FindKing(PlayerColor color)
@@ -58,12 +58,12 @@ namespace Chess.GameEngine
 
         public bool IsPositionEmpty(Coordinates position)
         {
-            return GameBoard[position.X, position.Y] == null;
+            return GameBoard[position.Row, position.Column] == null;
         }
 
         public bool IsPieceSameColor(Coordinates position, PlayerColor color)
         {
-            return GameBoard[position.X, position.Y]?.Owner.Color == color;
+            return GameBoard[position.Row, position.Column]?.Owner.Color == color;
         }
 
         public void Move(Coordinates from, Coordinates to)

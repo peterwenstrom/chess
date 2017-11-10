@@ -100,8 +100,8 @@ namespace Chess.GameEngine
 
         private bool IsKnightMove(Piece knight, Coordinates to)
         {
-            if ((Math.Abs(knight.Position.Y - to.Y) == 2 && Math.Abs(knight.Position.X - to.X) == 1) ||
-                (Math.Abs(knight.Position.Y - to.Y) == 1 && Math.Abs(knight.Position.X - to.X) == 2))
+            if ((Math.Abs(knight.Position.Column - to.Column) == 2 && Math.Abs(knight.Position.Row - to.Row) == 1) ||
+                (Math.Abs(knight.Position.Column - to.Column) == 1 && Math.Abs(knight.Position.Row - to.Row) == 2))
                 return true;
             else
                 return false;
@@ -109,7 +109,7 @@ namespace Chess.GameEngine
 
         private bool IsKingMove(Piece king, Coordinates to)
         {
-            if (Math.Abs(king.Position.Y - to.Y) < 2 && Math.Abs(king.Position.X - to.X) < 2)
+            if (Math.Abs(king.Position.Column - to.Column) < 2 && Math.Abs(king.Position.Row - to.Row) < 2)
                 return true;
             else
                 return false;
@@ -119,22 +119,22 @@ namespace Chess.GameEngine
         {
             if (pawn.Owner.Color == PlayerColor.White)
             {
-                if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == 1 && gameBoard.IsPositionEmpty(to))
+                if (pawn.Position.Column == to.Column && to.Row - pawn.Position.Row == 1 && gameBoard.IsPositionEmpty(to))
                     return true;
-                else if (to.X - pawn.Position.X == 1 && Math.Abs(pawn.Position.Y - to.Y) == 1 &&
+                else if (to.Row - pawn.Position.Row == 1 && Math.Abs(pawn.Position.Column - to.Column) == 1 &&
                     !gameBoard.IsPositionEmpty(to) && !gameBoard.IsPieceSameColor(to, pawn.Owner.Color))
                     return true;
-                else if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == 2 &&
+                else if (pawn.Position.Column == to.Column && to.Row - pawn.Position.Row == 2 &&
                     !IsStraightBlocked(gameBoard, pawn.Position, to) && gameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
                     return true;
             } else if (pawn.Owner.Color == PlayerColor.Black)
             {
-                if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == -1 && gameBoard.IsPositionEmpty(to))
+                if (pawn.Position.Column == to.Column && to.Row - pawn.Position.Row == -1 && gameBoard.IsPositionEmpty(to))
                     return true;
-                else if (to.X - pawn.Position.X == -1 && Math.Abs(pawn.Position.Y - to.Y) == 1 &&
+                else if (to.Row - pawn.Position.Row == -1 && Math.Abs(pawn.Position.Column - to.Column) == 1 &&
                     !gameBoard.IsPositionEmpty(to) && !gameBoard.IsPieceSameColor(to, pawn.Owner.Color))
                     return true;
-                else if (pawn.Position.Y == to.Y && to.X - pawn.Position.X == -2 &&
+                else if (pawn.Position.Column == to.Column && to.Row - pawn.Position.Row == -2 &&
                     !IsStraightBlocked(gameBoard, pawn.Position, to) && gameBoard.IsPositionEmpty(to) && !pawn.HasMoved)
                     return true;
             }
@@ -144,7 +144,7 @@ namespace Chess.GameEngine
 
         private bool IsStraight(Coordinates from, Coordinates to)
         {
-            if ((from.X != to.X && from.Y != to.Y) || ((from.X == to.X && from.Y == to.Y)))
+            if ((from.Row != to.Row && from.Column != to.Column) || ((from.Row == to.Row && from.Column == to.Column)))
                 return false;
             else
                 return true;
@@ -152,40 +152,40 @@ namespace Chess.GameEngine
 
         private bool IsStraightBlocked(Board gameBoard, Coordinates from, Coordinates to)
         {
-            if (from.X == to.X)
+            if (from.Row == to.Row)
             {
-                if (from.Y > to.Y)
+                if (from.Column > to.Column)
                 {
-                    for (int i = from.Y-1; i > to.Y; --i)
+                    for (int i = from.Column-1; i > to.Column; --i)
                     {
-                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.Row, i)))
                             return true;
                     }
                 }
                 else
                 {
-                    for (int i = from.Y+1; i < to.Y; ++i)
+                    for (int i = from.Column+1; i < to.Column; ++i)
                     {
-                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.X, i)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(from.Row, i)))
                             return true;
                     }
                 }
             }
-            else if (from.Y == to.Y)
+            else if (from.Column == to.Column)
             {
-                if (from.X > to.X)
+                if (from.Row > to.Row)
                 {
-                    for (int i = from.X-1; i > to.X; --i)
+                    for (int i = from.Row-1; i > to.Row; --i)
                     {
-                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Column)))
                             return true;
                     }
                 }
                 else
                 {
-                    for (int i = from.X+1; i < to.X; ++i)
+                    for (int i = from.Row+1; i < to.Row; ++i)
                     {
-                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Y)))
+                        if (!gameBoard.IsPositionEmpty(new Coordinates(i, from.Column)))
                             return true;
                     }
                 }
@@ -195,43 +195,43 @@ namespace Chess.GameEngine
 
         private bool IsDiagonal(Coordinates from, Coordinates to)
         {
-            if (Math.Abs(from.X - to.X) != Math.Abs(from.Y - to.Y))
+            if (Math.Abs(from.Row - to.Row) != Math.Abs(from.Column - to.Column))
                 return false;
             else
                 return true;
         }
         private bool IsDiagonalBlocked(Board gameBoard, Coordinates from, Coordinates to)
         {
-            int Distance = Math.Abs(from.X - to.X) - 1;
-            if (from.X > to.X && from.Y > to.Y)
+            int Distance = Math.Abs(from.Row - to.Row) - 1;
+            if (from.Row > to.Row && from.Column > to.Column)
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y + i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row + i, to.Column + i)))
                         return true;
                 }
             }
-            else if (from.X < to.X && from.Y > to.Y)
+            else if (from.Row < to.Row && from.Column > to.Column)
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y + i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row - i, to.Column + i)))
                         return true;
                 }
             }
-            else if (from.X < to.X && from.Y < to.Y)
+            else if (from.Row < to.Row && from.Column < to.Column)
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X - i, to.Y - i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row - i, to.Column - i)))
                         return true;
                 }
             }
-            else if (from.X > to.X && from.Y < to.Y)
+            else if (from.Row > to.Row && from.Column < to.Column)
             {
                 for (int i = Distance; i > 0; --i)
                 {
-                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.X + i, to.Y - i)))
+                    if (!gameBoard.IsPositionEmpty(new Coordinates(to.Row + i, to.Column - i)))
                         return true;
                 }
             }
