@@ -14,7 +14,7 @@ namespace Chess.GameEngine
         public Coordinates(int row, int column)
         {
             if (row > 7 || row < 0 || column > 7 || column < 0)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException();
             Row = row;
             Column = column;
         }

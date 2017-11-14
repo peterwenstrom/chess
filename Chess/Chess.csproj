@@ -59,6 +59,14 @@
     <Compile Include="GameEngine\GameRules.cs" />
     <Compile Include="GameEngine\Piece.cs" />
     <Compile Include="GameEngine\Player.cs" />
+    <Page Include="GamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainMenuPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -68,6 +76,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GameEngine\Board.cs" />
+    <Compile Include="GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainMenuPage.xaml.cs">
+      <DependentUpon>MainMenuPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -98,6 +112,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\chessBackground.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\black_bishop.png" />
+    <Resource Include="Images\white_bishop.png" />
+    <Resource Include="Images\black_king.png" />
+    <Resource Include="Images\white_king.png" />
+    <Resource Include="Images\black_knight.png" />
+    <Resource Include="Images\white_knight.png" />
+    <Resource Include="Images\black_pawn.png" />
+    <Resource Include="Images\white_pawn.png" />
+    <Resource Include="Images\black_queen.png" />
+    <Resource Include="Images\white_queen.png" />
+    <Resource Include="Images\black_rook.png" />
+    <Resource Include="Images\white_rook.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

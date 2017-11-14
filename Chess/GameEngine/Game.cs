@@ -20,10 +20,10 @@ namespace Chess.GameEngine
             Rules = rules;
         }
 
-        public void NewGame()
+        public void NewGame(Player playerWhite, Player playerBlack)
         {
-            PlayerWhite = new Player(PlayerColor.White);
-            PlayerBlack = new Player(PlayerColor.Black);
+            PlayerWhite = playerWhite;
+            PlayerBlack = playerBlack;
 
             GameBoard = new Board(new Piece[8, 8]);
 
@@ -92,7 +92,6 @@ namespace Chess.GameEngine
 
         public void SkolmattTest()
         {
-            NewGame();
             Move(new Coordinates(1, 3), new Coordinates(3, 3));
             System.Diagnostics.Debug.WriteLine(EndTurn());
             Move(new Coordinates(6, 0), new Coordinates(5, 0));

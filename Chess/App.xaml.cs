@@ -15,10 +15,5 @@ namespace Chess
     /// </summary>
     public partial class App : Application
     {
-        public App()
-        {
-            Game ChessGame = new Game(new GameRules());
-            ChessGame.Test();
-        }
     }
 }

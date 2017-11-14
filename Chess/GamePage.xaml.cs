@@ -12,20 +12,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using Chess.GameEngine;
 
 namespace Chess
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GamePage.xaml
     /// </summary>
-    public partial class MainWindow : NavigationWindow
+    public partial class GamePage : Page
     {
-        public MainWindow()
+        private Game ChessGame;
+        private GUIBoard GameBoard;
+        public GamePage(Game chessGame)
         {
+            ChessGame = chessGame;
             InitializeComponent();
         }
 
+        private void ClickOnBoard(object sender, MouseButtonEventArgs e)
+        {
+            Canvas boardCanvas = sender as Canvas;
+            Point clickPoint = e.GetPosition(boardCanvas);
+            System.Diagnostics.Debug.WriteLine(clickPoint.X);
+        }
     }
 }

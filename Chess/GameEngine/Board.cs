@@ -72,11 +72,13 @@ namespace Chess.GameEngine
             SetPiece(from);
             SetPiece(to, piece);
             piece.Position = to;
+            if (!piece.HasMoved)
+                piece.HasMoved = true;
         }
 
         public void ClearBoard()
         {
-            GameBoard = new Piece[8, 8];
+            GameBoard = new Piece[GameBoard.GetLength(0), GameBoard.GetLength(1)];
         }
 
         public void NewBoard(Player player1, Player player2)
