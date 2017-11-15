@@ -8,9 +8,13 @@
       d:DesignHeight="480" d:DesignWidth="480"
       Title="GamePage">
 
+    <Page.Resources>
+        <Image x:Key="black_pawn" Height="60" Stretch="Fill" Width="60" Source="Images/black_pawn.png" />
+    </Page.Resources>
+    
     <Grid>
         <Border Width="482" Height="482" BorderBrush="Black" BorderThickness="1">
-            <Canvas MouseDown="ClickOnBoard">
+            <Canvas Name="BoardCanvas" MouseDown="ClickOnBoard">
                 <Rectangle Width="480" Height="480" Canvas.Left="0" Canvas.Top="0">
                     <Rectangle.Fill>
                         <DrawingBrush Stretch="None" TileMode="Tile" Viewport="0,0,2,2" ViewportUnits="Absolute">
@@ -42,9 +46,25 @@
                     </Rectangle.Fill>
                 </Rectangle>
 
-                <Image Canvas.Left="1" Canvas.Top="421" Height="60" Stretch="Fill" Width="60" Source="Images/black_rook.png" />
-                <Image Canvas.Left="121" Canvas.Top="61" Height="60" Stretch="Fill" Width="60" Source="Images/white_pawn.png" />
-
+                <ItemsControl Name="PiecesLoop" ItemsSource="{Binding Path=GameBoard.Pieces}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Height="60" Stretch="Fill" Width="60" Source="{Binding Path=ImageSource}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type FrameworkElement}">
+                            <Setter Property="Canvas.Left" Value="{Binding Path=XPosition}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Path=YPosition}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+                
             </Canvas>
         </Border>
 

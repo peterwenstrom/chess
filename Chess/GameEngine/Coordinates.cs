@@ -18,5 +18,14 @@ namespace Chess.GameEngine
             Row = row;
             Column = column;
         }
+
+        public override bool Equals(Object obj)
+        {
+            Coordinates coordinates = obj as Coordinates;
+            if (Column == coordinates.Column && Row == coordinates.Row)
+                return true;
+            else
+                return false;
+        }
     }
 }

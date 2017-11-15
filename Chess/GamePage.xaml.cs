@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,19 +22,48 @@ namespace Chess
     /// </summary>
     public partial class GamePage : Page
     {
-        private Game ChessGame;
-        private GUIBoard GameBoard;
+        public Game ChessGame { get; private set; }
+        public GUIBoard GameBoard { get; private set; }
+        public Coordinates SelectedCoordinates { get; set; }
+        public List<Coordinates> PossibleMoves { get; set; }
+
         public GamePage(Game chessGame)
         {
-            ChessGame = chessGame;
             InitializeComponent();
+            ChessGame = chessGame;
+            ChessGame.NewGame(new Player(PlayerColor.White), new Player(PlayerColor.Black));
+            GameBoard = new GUIBoard(ChessGame.GameBoard);
+
+            DataContext = this;
         }
 
         private void ClickOnBoard(object sender, MouseButtonEventArgs e)
         {
-            Canvas boardCanvas = sender as Canvas;
-            Point clickPoint = e.GetPosition(boardCanvas);
-            System.Diagnostics.Debug.WriteLine(clickPoint.X);
+            Point clickedPoint = e.GetPosition(sender as Canvas);
+            Coordinates clickedCoordinates = GameBoard.ToCoordinates(clickedPoint);
+            Point tilePoint = GameBoard.ToPoint(clickedCoordinates);
+
+            if (SelectedCoordinates != null)
+            {
+                if (SelectedCoordinates.Equals(clickedCoordinates))
+                    SelectedCoordinates = null;
+                else if (PossibleMoves.Any(move => move.Equals(clickedCoordinates)))
+                {
+                    if (ChessGame.Move(SelectedCoordinates, clickedCoordinates))
+                    {
+                        GameBoard.UpdatePieces(SelectedCoordinates, clickedCoordinates);
+                        ChessGame.EndTurn();
+                    }
+                    PossibleMoves = null;
+                    SelectedCoordinates = null;
+                }
+            } else if (GameBoard.IsApprovedSelection(tilePoint, ChessGame.ActivePlayer.Color))
+            {
+                SelectedCoordinates = clickedCoordinates;
+                PossibleMoves = ChessGame.GetPossibleMoves(clickedCoordinates);
+            }
+                
+            
         }
     }
 }
