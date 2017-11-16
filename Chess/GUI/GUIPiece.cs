@@ -7,9 +7,8 @@ using System.Windows;
 using System.ComponentModel;
 using Chess.GameEngine;
 
-namespace Chess
+namespace Chess.GUI
 {
-    
 
     public class GUIPiece : INotifyPropertyChanged
     {

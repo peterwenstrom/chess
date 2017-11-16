@@ -18,7 +18,13 @@ namespace Chess.GameEngine
                 {
                     Coordinates newPostion = new Coordinates(i, j);
                     if (IsValidMove(gameBoard, piece, newPostion))
-                        moves.Add(newPostion);
+                    {
+                        Board tempBoard = gameBoard.GetCopy();
+                        tempBoard.Move(piece.Position, newPostion);
+                        if (!this.IsCheck(tempBoard, piece.Owner))
+                            moves.Add(newPostion);
+                    }
+                        
                 }
             }
 

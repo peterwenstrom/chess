@@ -5,17 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+
 using Chess.GameEngine;
 
-namespace Chess
+namespace Chess.GUI
 {
-    public class GUIBoard
+    public class GUIBoard : INotifyPropertyChanged
     {
         public ObservableCollection<GUIPiece> Pieces { get; set; }
+        public ObservableCollection<GUITile> PossibleMoves { get; set; }
+
+        private GUITile selectedTile;
 
         public GUIBoard(Board gameBoard)
         {
             Pieces = new ObservableCollection<GUIPiece>();
+            PossibleMoves = new ObservableCollection<GUITile>();
 
             foreach (var piece in gameBoard.GameBoard)
             {
@@ -35,6 +41,17 @@ namespace Chess
                     return true;
             }
             return false;
+        }
+
+        public void SetPossibleMoves(List<Coordinates> possibleMoves)
+        {
+            foreach (var move in possibleMoves)
+                PossibleMoves.Add(new GUITile(ToPoint(move)));
+        }
+
+        public void ClearPossibleMoves()
+        {
+            PossibleMoves.Clear();
         }
 
         public void UpdatePieces(Coordinates from, Coordinates to)
@@ -63,9 +80,30 @@ namespace Chess
 
         public Point ToPoint(Coordinates coordinates)
         {
-            return new Point(coordinates.Column * 60.0 + 1.0, coordinates.Row * 60.0 + 1.0);
+            return new Point(coordinates.Column * 60.0, coordinates.Row * 60.0);
         }
 
-        
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public GUITile SelectedTile
+        {
+            get
+            {
+                return this.selectedTile;
+            }
+            set
+            {
+                if (value != this.selectedTile)
+                {
+                    this.selectedTile = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private void NotifyPropertyChanged(String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

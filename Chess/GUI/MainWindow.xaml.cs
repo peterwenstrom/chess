@@ -13,9 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using Chess.GameEngine;
-
-namespace Chess
+namespace Chess.GUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
