@@ -24,6 +24,7 @@ namespace Chess.GUI
     {
         public Game ChessGame { get; private set; }
         public GUIBoard GameBoard { get; private set; }
+        public GUIMessage GameMessage { get; private set; }
 
         public GamePage(Game chessGame)
         {
@@ -31,6 +32,7 @@ namespace Chess.GUI
             ChessGame = chessGame;
             ChessGame.NewGame(new Player(PlayerColor.White), new Player(PlayerColor.Black));
             GameBoard = new GUIBoard(ChessGame.GameBoard);
+            GameMessage = new GUIMessage("White player's turn");
 
             DataContext = this;
         }
@@ -56,7 +58,7 @@ namespace Chess.GUI
                     if (ChessGame.Move(selectedCoordinates, clickedCoordinates))
                     {
                         GameBoard.UpdatePieces(selectedCoordinates, clickedCoordinates);
-                        ChessGame.EndTurn();
+                        GameMessage.Message = ChessGame.EndTurn();
                     }
                     GameBoard.ClearPossibleMoves();
                     GameBoard.SelectedTile = null;
@@ -69,6 +71,17 @@ namespace Chess.GUI
             }
                 
             
+        }
+
+        private void SaveGameClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void MainMenuClick(object sender, RoutedEventArgs e)
+        {
+            MainMenuPage mainMenuPage = new MainMenuPage();
+            this.NavigationService.Navigate(mainMenuPage);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Chess.GameEngine
             else if (IsStalemate)
                 return "It's a draw...";
             else
-                return ActivePlayer.Color.ToString() + " players turn";
+                return ActivePlayer.Color.ToString() + " player's turn";
         }
 
         public void ChangeActivePlayer()

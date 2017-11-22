@@ -80,6 +80,7 @@
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\GUIBoard.cs" />
+    <Compile Include="GUI\GUIMessage.cs" />
     <Compile Include="GUI\GUIPiece.cs" />
     <Compile Include="GUI\GUITile.cs" />
     <Compile Include="GUI\MainMenuPage.xaml.cs">
