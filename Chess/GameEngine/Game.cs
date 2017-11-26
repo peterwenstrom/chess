@@ -9,27 +9,36 @@ namespace Chess.GameEngine
     public class Game
     {
 
-        public Board GameBoard { get; set; }
-        public Player PlayerWhite { get; set; }
-        public Player PlayerBlack { get; set; }
-        public Player ActivePlayer { get; set; }
-        public GameRules Rules { get; set; }
+        public Board GameBoard { get; private set; }
+        public Player PlayerWhite { get; private set; }
+        public Player PlayerBlack { get; private set; }
+        public Player ActivePlayer { get; private set; }
+        public GameRules Rules { get; private set; }
+        public string GameStateMessage { get; private set; }
 
         public Game(GameRules rules)
         {
             Rules = rules;
         }
 
-        public void NewGame(Player playerWhite, Player playerBlack)
+        public string NewGame(Player playerWhite, Player playerBlack)
         {
             PlayerWhite = playerWhite;
             PlayerBlack = playerBlack;
 
             GameBoard = new Board(new Piece[8, 8]);
-
             GameBoard.NewBoard(PlayerWhite, PlayerBlack);
 
             ActivePlayer = PlayerWhite;
+
+            GameStateMessage = "White player's turn";
+            return GameStateMessage;
+        }
+
+        public void LoadGame(Player playerWhite, Player playerBlack, List<Piece> pieces)
+        {
+            GameBoard = new Board(new Piece[8, 8]);
+            GameBoard.LoadBoard(pieces);
         }
 
         public bool Move(Coordinates from, Coordinates to)
@@ -44,28 +53,30 @@ namespace Chess.GameEngine
 
         public string EndTurn()
         {
-            GameBoard.PrintBoard();
+            // GameBoard.PrintBoard();
             ChangeActivePlayer();
             bool IsCheck = Rules.IsCheck(GameBoard, ActivePlayer);
             bool IsStalemate = Rules.IsStalemate(GameBoard, ActivePlayer);
             if (IsCheck && IsStalemate)
-                return ActivePlayer.GetOpposingColor().ToString() + " player won the game!";
+                GameStateMessage = ActivePlayer.GetOpposingColor().ToString() + " player won the game!";
             else if (IsCheck)
-                return ActivePlayer.Color.ToString() + " is in check!";
+                GameStateMessage = ActivePlayer.Color.ToString() + " is in check!";
             else if (IsStalemate)
-                return "It's a draw...";
+                GameStateMessage = "It's a draw...";
             else
-                return ActivePlayer.Color.ToString() + " player's turn";
-        }
+                GameStateMessage = ActivePlayer.Color.ToString() + " player's turn";
 
-        public void ChangeActivePlayer()
-        {
-            ActivePlayer = GetOppositePlayer(ActivePlayer);
+            return GameStateMessage;
         }
 
         public List<Coordinates> GetPossibleMoves(Coordinates from)
         {
             return Rules.GetPossibleMoves(GameBoard.GetPiece(from), GameBoard);
+        }
+
+        private void ChangeActivePlayer()
+        {
+            ActivePlayer = GetOppositePlayer(ActivePlayer);
         }
 
         private Player GetOppositePlayer(Player player)
@@ -90,22 +101,5 @@ namespace Chess.GameEngine
             return true;
         }
 
-        public void SkolmattTest()
-        {
-            Move(new Coordinates(1, 3), new Coordinates(3, 3));
-            System.Diagnostics.Debug.WriteLine(EndTurn());
-            Move(new Coordinates(6, 0), new Coordinates(5, 0));
-            System.Diagnostics.Debug.WriteLine(EndTurn());
-            Move(new Coordinates(0, 2), new Coordinates(3, 5));
-            System.Diagnostics.Debug.WriteLine(EndTurn());
-            Move(new Coordinates(7, 0), new Coordinates(6, 0));
-            System.Diagnostics.Debug.WriteLine(EndTurn());
-            Move(new Coordinates(0, 4), new Coordinates(2, 2));
-            System.Diagnostics.Debug.WriteLine(EndTurn());
-            Move(new Coordinates(7, 6), new Coordinates(5, 7));
-            System.Diagnostics.Debug.WriteLine(EndTurn());
-            Move(new Coordinates(2, 2), new Coordinates(6, 2));
-            System.Diagnostics.Debug.WriteLine(EndTurn());
-        }
     }
 }

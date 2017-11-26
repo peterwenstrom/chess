@@ -107,9 +107,11 @@ namespace Chess.GameEngine
             GameBoard[7, 3] = new Piece(new Coordinates(7, 3), player2, PieceType.King);
         }
 
-        public void LoadBoard(List<Piece> piecesPlayer1, List<Piece> piecesPlayer2)
+        public void LoadBoard(List<Piece> pieces)
         {
-            
+            ClearBoard();
+            foreach (var piece in pieces)
+                SetPiece(piece.Position, piece);
         }
 
         // FOR TESTING PURPOSES
