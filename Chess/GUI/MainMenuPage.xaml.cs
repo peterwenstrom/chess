@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Chess.GameEngine;
+using Chess.DataStorage;
 
 namespace Chess.GUI
 {
@@ -28,12 +29,13 @@ namespace Chess.GUI
 
         private void NewGameClick(object sender, RoutedEventArgs e)
         {
-            GamePage gamePage = new GamePage(new Game(new GameRules()));
+            GamePage gamePage = new GamePage(new Game(new GameRules()), new GUIBoard(), new GUIMessage());
+            gamePage.NewGame(new Player(PlayerColor.White), new Player(PlayerColor.Black));
             this.NavigationService.Navigate(gamePage);
         }
         private void LoadGameClick(object sender, RoutedEventArgs e)
         {
-
+            Test.ReadFile();
         }
         private void ExitGameClick(object sender, RoutedEventArgs e)
         {

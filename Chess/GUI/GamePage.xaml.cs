@@ -26,15 +26,25 @@ namespace Chess.GUI
         public GUIBoard GameBoard { get; private set; }
         public GUIMessage GameMessage { get; private set; }
 
-        public GamePage(Game chessGame)
+        public GamePage(Game chessGame, GUIBoard gameBoard, GUIMessage message)
         {
             InitializeComponent();
             ChessGame = chessGame;
-            ChessGame.NewGame(new Player(PlayerColor.White), new Player(PlayerColor.Black));
-            GameBoard = new GUIBoard(ChessGame.GameBoard);
-            GameMessage = new GUIMessage("White player's turn");
+            GameBoard = gameBoard;
+            GameMessage = message;
 
             DataContext = this;
+        }
+
+        public void NewGame(Player playerWhite, Player playerBlack)
+        {
+            GameMessage.Message = ChessGame.NewGame(playerWhite, playerBlack);
+            GameBoard.SetUpBoard(ChessGame.GameBoard);
+        }
+
+        public void LoadGame()
+        {
+
         }
 
         private void ClickOnBoard(object sender, MouseButtonEventArgs e)

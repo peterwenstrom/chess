@@ -18,11 +18,14 @@ namespace Chess.GUI
 
         private GUITile selectedTile;
 
-        public GUIBoard(Board gameBoard)
+        public GUIBoard()
         {
             Pieces = new ObservableCollection<GUIPiece>();
             PossibleMoves = new ObservableCollection<GUITile>();
+        }
 
+        public void SetUpBoard(Board gameBoard)
+        {
             foreach (var piece in gameBoard.GameBoard)
             {
                 if (piece != null)

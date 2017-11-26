@@ -10,6 +10,9 @@ namespace Chess.GUI
     public class GUIMessage : INotifyPropertyChanged
     {
         private string message;
+
+        public GUIMessage() {}
+
         public GUIMessage(string message)
         {
             this.message = message;
