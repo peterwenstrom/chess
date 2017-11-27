@@ -22,20 +22,32 @@ namespace Chess.GUI
     /// </summary>
     public partial class MainMenuPage : Page
     {
+        private GamePage gamePage;
         public MainMenuPage()
         {
             InitializeComponent();
+
+            gamePage = new GamePage(
+                new Game(new GameRules(), new Board(new Piece[8, 8]), new StorageHandler()),
+                new GUIBoard(),
+                new GUIMessage());
         }
 
         private void NewGameClick(object sender, RoutedEventArgs e)
         {
-            GamePage gamePage = new GamePage(new Game(new GameRules()), new GUIBoard(), new GUIMessage());
             gamePage.NewGame(new Player(PlayerColor.White), new Player(PlayerColor.Black));
+            this.NavigationService.Navigate(gamePage);
+        }
+        private void ResumeGameClick(object sender, RoutedEventArgs e)
+        {
+            gamePage.LoadGame();
             this.NavigationService.Navigate(gamePage);
         }
         private void LoadGameClick(object sender, RoutedEventArgs e)
         {
-            Test.ReadFile();
+            // Get user to select file and send filename/path as parameter
+            gamePage.LoadGame();
+            this.NavigationService.Navigate(gamePage);
         }
         private void ExitGameClick(object sender, RoutedEventArgs e)
         {

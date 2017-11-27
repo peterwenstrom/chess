@@ -4,21 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Chess.DataStorage;
+
 namespace Chess.GameEngine
 {
     public class Game
     {
-
+        public GameRules Rules { get; private set; }
         public Board GameBoard { get; private set; }
         public Player PlayerWhite { get; private set; }
         public Player PlayerBlack { get; private set; }
         public Player ActivePlayer { get; private set; }
-        public GameRules Rules { get; private set; }
         public string GameStateMessage { get; private set; }
 
-        public Game(GameRules rules)
+        private StorageHandler storageHandler;
+
+        public Game(GameRules rules, Board gameBoard, StorageHandler handler)
         {
             Rules = rules;
+            GameBoard = gameBoard;
+            storageHandler = handler;
         }
 
         public string NewGame(Player playerWhite, Player playerBlack)
@@ -26,19 +31,30 @@ namespace Chess.GameEngine
             PlayerWhite = playerWhite;
             PlayerBlack = playerBlack;
 
-            GameBoard = new Board(new Piece[8, 8]);
             GameBoard.NewBoard(PlayerWhite, PlayerBlack);
 
             ActivePlayer = PlayerWhite;
-
             GameStateMessage = "White player's turn";
+
+            storageHandler.SetupTempFile(new List<Player> { PlayerWhite, PlayerBlack },
+                GameBoard.FindPieces(),
+                GameStateMessage);
             return GameStateMessage;
         }
 
-        public void LoadGame(Player playerWhite, Player playerBlack, List<Piece> pieces)
+        public string LoadGame(string filename)
         {
-            GameBoard = new Board(new Piece[8, 8]);
-            GameBoard.LoadBoard(pieces);
+            GameData gameData = storageHandler.LoadFromFile(filename);
+
+            PlayerWhite = gameData.Players.First(player => player.Color == PlayerColor.White);
+            PlayerBlack = gameData.Players.First(player => player.Color == PlayerColor.Black);
+
+            GameBoard.LoadBoard(gameData.Pieces);
+
+            ActivePlayer = gameData.ActivePlayer;
+            GameStateMessage = gameData.GameStateMessage;
+
+            return GameStateMessage;
         }
 
         public bool Move(Coordinates from, Coordinates to)

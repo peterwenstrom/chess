@@ -46,12 +46,12 @@ namespace Chess.GameEngine
             return null;
         }
 
-        public List<Piece> FindPieces(PlayerColor color)
+        public List<Piece> FindPieces(Nullable<PlayerColor> color = null)
         {
             List<Piece> pieces = new List<Piece>();
             for (int i = 0; i < GameBoard.GetLength(0); ++i)
                 for (int j = 0; j < GameBoard.GetLength(1); ++j)
-                    if (GameBoard[i, j] != null && GameBoard[i, j].Owner.Color == color)
+                    if (GameBoard[i, j] != null && (GameBoard[i, j].Owner.Color == color || color == null))
                         pieces.Add(GameBoard[i, j]);
             return pieces;
         }

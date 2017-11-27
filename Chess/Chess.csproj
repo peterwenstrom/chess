@@ -54,6 +54,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataStorage\GameData.cs" />
+    <Compile Include="DataStorage\StorageHandler.cs" />
+    <Compile Include="DataStorage\Translators\PieceTranslator.cs" />
+    <Compile Include="DataStorage\Translators\PlayerTranslator.cs" />
     <Compile Include="GameEngine\Coordinates.cs" />
     <Compile Include="GameEngine\Game.cs" />
     <Compile Include="GameEngine\GameRules.cs" />

@@ -13,7 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using Chess.GameEngine;
+using Chess.DataStorage;
 
 namespace Chess.GUI
 {
@@ -42,9 +44,10 @@ namespace Chess.GUI
             GameBoard.SetUpBoard(ChessGame.GameBoard);
         }
 
-        public void LoadGame()
+        public void LoadGame(string filename = null)
         {
-
+            GameMessage.Message = ChessGame.LoadGame(filename);
+            GameBoard.SetUpBoard(ChessGame.GameBoard);
         }
 
         private void ClickOnBoard(object sender, MouseButtonEventArgs e)
