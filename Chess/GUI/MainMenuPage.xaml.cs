@@ -12,8 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using Chess.GameEngine;
 using Chess.DataStorage;
+using Chess.DataStorage.Exceptions;
 
 namespace Chess.GUI
 {
@@ -40,14 +42,40 @@ namespace Chess.GUI
         }
         private void ResumeGameClick(object sender, RoutedEventArgs e)
         {
-            gamePage.LoadGame();
-            this.NavigationService.Navigate(gamePage);
+            try
+            {
+                gamePage.LoadGame();
+                this.NavigationService.Navigate(gamePage);
+            }
+            catch (LoadGameFileException error)
+            {
+                MessageBox.Show(error.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void LoadGameClick(object sender, RoutedEventArgs e)
         {
-            // Get user to select file and send filename/path as parameter
-            gamePage.LoadGame();
-            this.NavigationService.Navigate(gamePage);
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "XML File|*.xml"
+            };
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                try
+                {
+                    gamePage.LoadGame(filename);
+                    this.NavigationService.Navigate(gamePage);
+                }
+                catch (LoadGameFileException error)
+                {
+                    MessageBox.Show(error.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                
+            }
+
         }
         private void ExitGameClick(object sender, RoutedEventArgs e)
         {

@@ -72,6 +72,7 @@ namespace Chess.GUI
                     {
                         GameBoard.UpdatePieces(selectedCoordinates, clickedCoordinates);
                         GameMessage.Message = ChessGame.EndTurn();
+                        // Possible save point
                     }
                     GameBoard.ClearPossibleMoves();
                     GameBoard.SelectedTile = null;
@@ -88,7 +89,18 @@ namespace Chess.GUI
 
         private void SaveGameClick(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "XML File|*.xml"
+            };
             
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                ChessGame.SaveGame(filename);
+            }
         }
 
         private void MainMenuClick(object sender, RoutedEventArgs e)

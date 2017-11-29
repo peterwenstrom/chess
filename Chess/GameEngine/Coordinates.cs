@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Chess.GameEngine.Exceptions;
+
 namespace Chess.GameEngine
 {
     public class Coordinates
@@ -14,7 +16,7 @@ namespace Chess.GameEngine
         public Coordinates(int row, int column)
         {
             if (row > 7 || row < 0 || column > 7 || column < 0)
-                throw new ArgumentOutOfRangeException();
+                throw new CoordinateOutOfBoundsException("The coordinate is outside the board!");
             Row = row;
             Column = column;
         }

@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 
 using Chess.GameEngine;
+using Chess.DataStorage.Exceptions;
 
 namespace Chess.DataStorage.Translators
 {
@@ -24,9 +25,20 @@ namespace Chess.DataStorage.Translators
 
         public static Piece Translate(XElement element, List<Player> players)
         {
-            int row = Int32.Parse(element.Element("Row").Value);
-            int column = Int32.Parse(element.Element("Column").Value);
-            PlayerColor color = (PlayerColor)Int32.Parse(element.Element("Color").Value);
+            int row;
+            int column;
+            PlayerColor color;
+
+            try
+            {
+                row = Int32.Parse(element.Element("Row").Value);
+                column = Int32.Parse(element.Element("Column").Value);
+                color = (PlayerColor)Int32.Parse(element.Element("Color").Value);
+            }
+            catch (NullReferenceException)
+            {
+                throw new TranslateToPieceException("Invalid piece in XElement.");
+            }
 
 
             var piece = new Piece(

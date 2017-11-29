@@ -57,11 +57,17 @@ namespace Chess.GameEngine
             return GameStateMessage;
         }
 
+        public void SaveGame(string filename)
+        {
+            storageHandler.SaveFile(filename);
+        }
+
         public bool Move(Coordinates from, Coordinates to)
         {
             if (TryMove(from, to))
             {
                 GameBoard.Move(from, to);
+                storageHandler.UpdatePiecesInFile(GameBoard.FindPieces());
                 return true;
             }
             return false;
@@ -69,10 +75,10 @@ namespace Chess.GameEngine
 
         public string EndTurn()
         {
-            // GameBoard.PrintBoard();
             ChangeActivePlayer();
             bool IsCheck = Rules.IsCheck(GameBoard, ActivePlayer);
             bool IsStalemate = Rules.IsStalemate(GameBoard, ActivePlayer);
+
             if (IsCheck && IsStalemate)
                 GameStateMessage = ActivePlayer.GetOpposingColor().ToString() + " player won the game!";
             else if (IsCheck)
@@ -81,6 +87,8 @@ namespace Chess.GameEngine
                 GameStateMessage = "It's a draw...";
             else
                 GameStateMessage = ActivePlayer.Color.ToString() + " player's turn";
+
+            storageHandler.UpdateGameState(ActivePlayer, GameStateMessage);
 
             return GameStateMessage;
         }

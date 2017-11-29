@@ -54,11 +54,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataStorage\Exceptions\TranslateToPieceException.cs" />
+    <Compile Include="DataStorage\Exceptions\TranslateToPlayerException.cs" />
     <Compile Include="DataStorage\GameData.cs" />
+    <Compile Include="DataStorage\Exceptions\LoadGameFileException.cs" />
     <Compile Include="DataStorage\StorageHandler.cs" />
     <Compile Include="DataStorage\Translators\PieceTranslator.cs" />
     <Compile Include="DataStorage\Translators\PlayerTranslator.cs" />
     <Compile Include="GameEngine\Coordinates.cs" />
+    <Compile Include="GameEngine\Exceptions\CoordinateOutOfBoundsException.cs" />
     <Compile Include="GameEngine\Game.cs" />
     <Compile Include="GameEngine\GameRules.cs" />
     <Compile Include="GameEngine\Piece.cs" />
@@ -138,5 +142,6 @@
     <Resource Include="GUI\Images\black_rook.png" />
     <Resource Include="GUI\Images\white_rook.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

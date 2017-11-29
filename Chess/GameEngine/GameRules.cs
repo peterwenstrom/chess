@@ -12,9 +12,9 @@ namespace Chess.GameEngine
         {
             List<Coordinates> moves = new List<Coordinates>();
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < gameBoard.GameBoard.GetLength(0); i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < gameBoard.GameBoard.GetLength(1); j++)
                 {
                     Coordinates newPostion = new Coordinates(i, j);
                     if (IsValidMove(gameBoard, piece, newPostion))
@@ -53,12 +53,6 @@ namespace Chess.GameEngine
             Piece king = gameBoard.FindKing(player.Color);
             List<Piece> opposingPieces = gameBoard.FindPieces(player.GetOpposingColor());
             return opposingPieces.Any(piece => IsValidMove(gameBoard, piece, king.Position));
-        }
-
-        public bool IsCheckmate(Board gameBoard, Player player)
-        {
-            return IsStalemate(gameBoard, player) &&
-                IsCheck(gameBoard, player);
         }
 
         public bool IsValidMove(Board gameBoard, Piece piece, Coordinates to)

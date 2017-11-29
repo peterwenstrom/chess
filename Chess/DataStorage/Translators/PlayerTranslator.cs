@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 
 using Chess.GameEngine;
+using Chess.DataStorage.Exceptions;
 
 namespace Chess.DataStorage.Translators
 {
@@ -20,8 +21,18 @@ namespace Chess.DataStorage.Translators
 
         public static Player Translate(XElement element)
         {
-            // Try catch block???
-            return new Player((PlayerColor)Int32.Parse(element.Element("Color").Value));
+            int color;
+
+            try
+            {
+                color = Int32.Parse(element.Element("Color").Value);
+            }
+            catch (NullReferenceException)
+            {
+                throw new TranslateToPlayerException("Invalid player in XElement.");
+            }
+
+            return new Player((PlayerColor)color);
         }
     }
 }

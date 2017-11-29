@@ -113,44 +113,5 @@ namespace Chess.GameEngine
             foreach (var piece in pieces)
                 SetPiece(piece.Position, piece);
         }
-
-        // FOR TESTING PURPOSES
-        public void PrintBoard()
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    Piece piece = GameBoard[i, j];
-
-                    switch (piece?.Type)
-                    {
-                        case PieceType.Bishop:
-                            System.Diagnostics.Debug.Write("B ");
-                            break;
-                        case PieceType.Rook:
-                            System.Diagnostics.Debug.Write("R ");
-                            break;
-                        case PieceType.Queen:
-                            System.Diagnostics.Debug.Write("Q ");
-                            break;
-                        case PieceType.Pawn:
-                            System.Diagnostics.Debug.Write("P ");
-                            break;
-                        case PieceType.King:
-                            System.Diagnostics.Debug.Write("K ");
-                            break;
-                        case PieceType.Knight:
-                            System.Diagnostics.Debug.Write("k ");
-                            break;
-                        default:
-                            System.Diagnostics.Debug.Write("X ");
-                            break;
-                    }
-                }
-                System.Diagnostics.Debug.Write("\n");
-            }
-            System.Diagnostics.Debug.Write("\n");
-        }
     }
 }
